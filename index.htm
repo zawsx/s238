@@ -1,6 +1,8 @@
-<!doctype html><html lang=en><head><title>TreeWardens</title><style>* {box-sizing: border-box;}
-.video-background {background: #000; position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: -99;}
-.video-foreground, .video-background iframe {position: absolute;top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;}
+<!doctype html><html lang=en><head><title>TreeWardens</title><meta charset=utf-8>
+<style>* {box-sizing: border-box;}
+#video-background {background: #000; position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: -99;}
+#vidtop-content {top: 0;color: #fff;}
+#video-foreground, #video-background {position: absolute;top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;}
 #vidtop-content {top: 0;color: #fff;}
 .vid-inf22 {position: absolute; background: rgba(0,0,0,0.3); color: #fff; padding: 1rem; font-family: Avenir, Helvetica, sans-serif; }
 .vid-inf22 h2 { font-size: 2rem; font-weight: 500; margin-top: 0; }
@@ -8,10 +10,36 @@
 @media (min-aspect-ratio: 16/9) {  .video-foreground { height: 300%; top: -100%; }}
 @media (max-aspect-ratio: 16/9) {  .video-foreground { width: 300%; left: -100%; }}
 @media all and (max-width: 600px) {.vid-inf22 { width: 50%; padding: .5rem; } .vid-inf22 h2 { margin-bottom: .2rem; }}
-@media all and (max-width: 500px) {.vid-inf22 .acronym { display: none; }}</style><meta charset=utf-8></head><body>
-<div class="video-background"><div class="video-foreground">
-<iframe src="https://www.youtube.com/embed/Qzgf3gHQdJI?controls=1&showinfo=0&rel=0&autoplay=1&loop=1&playlist=PLY7jeHB1P3w1WduI8kv0YqtvNZijhUh-V" frameborder="0" allowfullscreen></iframe></div></div>
-<div id="vidtop-content"><div class="vid-inf22" style="width: 55%; font-size: 1rem; top: 0; left:0"> <h2>Welcome!</h2>
-<p>Please, bear with us whilst we improve this site.</div>
-<div class="vid-inf22" style="width: 75%; font-size: 0.8rem; bottom:0; right:0;">Here are some local people helping the council plant trees in their local parks - tree wardens are local people who care about trees.<br />
-     <p>Please refesh the page if you want to see the video again</div></div></body></html>
+@media all and (max-width: 500px) {.vid-inf22 .acronym { display: none; }}</style></head><body>
+<div id="video-background"><div id="video-foreground"></div></div>
+
+<div id="vidtop-content"><div class="vid-inf22" style="width: 55%; font-size: 1rem; top: 0; left:0"> 
+<p>Tree Wardens</div>
+<div class="vid-inf22" style="width: 75%; font-size: 0.8rem; bottom:0; right:0;">Local people caring about trees - click here for more info</div></div>
+
+<script>var vIndex=0;var szvIDs=[
+{vID:'Qzgf3gHQdJI', szSecsBeg: 0, szSecsEnd: 15000 }, {vID:'Qzgf3gHQdJI', szSecsBeg: 0, szSecsEnd: 15000 },
+{vID:'Qzgf3gHQdJI', szSecsBeg: 0, szSecsEnd: 15000 }, {vID:'Qzgf3gHQdJI', szSecsBeg: 0, szSecsEnd: 15000 },
+{vID:'Qzgf3gHQdJI', szSecsBeg: 0, szSecsEnd: 15000 } ];
+
+var tag=document.createElement('script'); tag.src="https://www.youtube.com/iframe_api"; // load API async.
+var firstScriptTag=document.getElementsByTagName('script')[0];firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+//Create <iframe> (and YouTube player) after the API code downloads.
+var player; function onYouTubeIframeAPIReady() {player=new YT.Player('video-background', {
+events: {'onReady': onPlayerReady, 'onStateChange': onPlayerStateChange  }  });   }
+// The API will call this function when the video player is ready.
+function onPlayerReady(event) {console.log('begun',vIndex, ' video:',szvIDs[vIndex]);
+event.target.cueVideoById({videoId: szvIDs[vIndex].vID,
+	szSecsBeg: szvIDs[vIndex].szSecsBeg, szSecsEnd: szvIDs[vIndex].szSecsEnd}); event.target.playVideo(); }
+
+function onPlayerStateChange(event) {
+	if (event.data === YT.PlayerState.ENDED) {console.log('ended',vIndex);
+		if (vIndex < szvIDs.length - 1) {
+            event.target.loadVideoById({
+              videoId: szvIDs[vIndex].vID, szSecsBeg: szvIDs[vIndex].szSecsBeg, szSecsEnd: szvIDs[vIndex].szSecsEnd
+            });
+            vIndex++;
+        }
+    }
+}
+</script></body></html>
